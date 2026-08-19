@@ -1,0 +1,11 @@
+name: ci fr
+on:
+  pull_request:
+    paths:
+      - .github/ci-fr.yml
+  workflow_dispatch:
+jobs:
+  bonjour-le-monde:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Bonjour le monde !"
