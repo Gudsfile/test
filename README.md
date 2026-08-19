@@ -1,5 +1,5 @@
 # PR Test
 
-Je teste avec "Do not allow bypassing the above settings" de coché.
+Je teste avec "_Do not allow bypassing the above settings_" de coché.
 
-Je teste avec "Require status checks to pass".
+Je teste avec "_Require status checks to pass_".
