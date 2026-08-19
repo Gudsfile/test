@@ -1,8 +1,6 @@
 name: ci fr
 on:
-  pull_request:
-    paths:
-      - .github/ci-fr.yml
+  workflow_call:
   workflow_dispatch:
 jobs:
   bonjour-le-monde:

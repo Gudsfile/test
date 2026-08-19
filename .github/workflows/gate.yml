@@ -1,0 +1,44 @@
+name: CI
+
+on: pull_request
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      ci: ${{ steps.filter.outputs.ci }}
+      cifr: ${{ steps.filter.outputs.cifr }}
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        id: filter
+        with:
+          filters: |
+            common: &common
+              - .github/workflows/gate.yml
+            ci:
+              - *common
+              - .github/workflows/ci.yml
+            cifr:
+              - *common
+              - .github/workflows/ci-fr.yml
+
+  ci:
+    needs: changes
+    if: needs.changes.outputs.ci == 'true'
+    uses: ./.github/workflows/ci.yml
+
+  cifr:
+    needs: changes
+    if: needs.changes.outputs.cifr == 'true'
+    uses: ./.github/workflows/ci-fr.yml
+
+  ci-gate:
+    needs: [changes, ci, cifr]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if a required job did not succeed
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
